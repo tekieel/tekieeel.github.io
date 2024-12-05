@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Archivos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #0078D4;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 1rem;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+        .card h3 {
+            margin: 0;
+            padding: 0.5rem;
+            background-color: #f4f4f4;
+        }
+        .card a {
+            color: #0078D4;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            margin-top: 1rem;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Galería de Archivos</h1>
+    </header>
+    <main>
+        <div class="gallery" id="gallery">
+            <!-- Archivos publicados se mostrarán aquí -->
+        </div>
+    </main>
+    <script>
+        const gallery = document.getElementById('gallery');
+        const posts = JSON.parse(localStorage.getItem('forumFiles')) || [];
+
+        posts.forEach(post => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const title = document.createElement('h3');
+            title.textContent = post.title;
+            card.appendChild(title);
+
+            if (post.fileType.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = post.fileContent;
+                img.alt = post.title;
+                card.appendChild(img);
+            } else {
+                const link = document.createElement('a');
+                link.href = post.fileContent;
+                link.textContent = `Descargar ${post.title}`;
+                link.download = post.title;
+                card.appendChild(link);
+            }
+
+            gallery.appendChild(card);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foro de Archivos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #0078D4;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        main {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form input, form button {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        form button {
+            background-color: #0078D4;
+            color: white;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #005BB5;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #0078D4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Foro de Archivos</h1>
+    </header>
+    <main>
+        <form id="fileForm">
+            <label for="fileTitle">Título del Archivo</label>
+            <input type="text" id="fileTitle" placeholder="Título" required>
+            
+            <label for="fileInput">Selecciona un Archivo</label>
+            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpeg,.jpg,.png,.gif,.txt,.xlsx" required>
+            
+            <button type="submit">Publicar Archivo</button>
+        </form>
+        <a href="galeria.html" target="_blank">Ver Galería</a>
+    </main>
+    <script>
+        const fileForm = document.getElementById('fileForm');
+        const posts = JSON.parse(localStorage.getItem('forumFiles')) || [];
+
+        fileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('fileTitle').value;
+            const file = document.getElementById('fileInput').files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const newPost = { title, fileType: file.type, fileContent: reader.result };
+                    posts.push(newPost);
+                    localStorage.setItem('forumFiles', JSON.stringify(posts));
+                    alert('Archivo publicado con éxito!');
+                    fileForm.reset();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
